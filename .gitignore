@@ -1,0 +1,17 @@
+# データ
+data/*
+
+# 環境
+.venv
+.env
+__pycache__/
+.ipynb_checkpoints/
+
+# PyTorch
+*.pth
+
+# EZKL 生成ファイル（大きいもののみ除外）
+*.onnx
+*.compiled
+*.pk
+*.vk
