@@ -29,6 +29,17 @@ Iris データセット（4 特徴量・3 クラス）を MLP で分類し、ZK 
 
 Fashion MNIST（28×28 画像・10 クラス）を CNN で分類。`input_visibility = "private"` にして入力を隠した証明を生成。
 
+### little_transformer.ipynb
+
+小さなTransformerモデルの学習能力を多角的に検証。4種類の難易度・性質の異なるタスクで、モデルの基礎能力を体系的にテストする。
+
+| タスク | 内容 | 検証ポイント |
+|---|---|---|
+| ReverseDataModule | 数列を逆順に並び替え | 位置情報（Positional Encoding）と入力全体の把握 |
+| AdditionDataModule | 2桁の足し算（桁ごとにトークン化） | 繰り上がりロジックの自己学習 |
+| ParityDataModule | バイナリ列の累積パリティ計算 | 長期記憶・カウント能力（Transformerが苦手な領域） |
+| WikipediaDataModule | enwik8 を使った文字レベル言語モデル | 自然言語の自律生成（LLMの基礎能力） |
+
 ### notebooks/simple_demo/（ステップ別）
 
 simple_demo を各ステップに分解した学習用ノートブック群。
