@@ -40,6 +40,23 @@ Fashion MNIST（28×28 画像・10 クラス）を CNN で分類。`input_visibi
 | ParityDataModule | バイナリ列の累積パリティ計算 | 長期記憶・カウント能力（Transformerが苦手な領域） |
 | WikipediaDataModule | enwik8 を使った文字レベル言語モデル | 自然言語の自律生成（LLMの基礎能力） |
 
+### proof_splitting.ipynb
+
+大きなモデルをメモリ制約の中でZKP化するための Proof Splitting の実装。モデルを複数のサブモデルに分割し、それぞれ独立して証明を生成して繋ぎ合わせる。
+
+- **分割方法**: `onnx.utils.extract_model` で中間ノードを指定して分割（分割点は Netron で確認）
+- **接続方法**: `ezkl.swap_proof_commitments` で前段の出力と後段の入力が一致することを証明に埋め込む
+- **メモリ戦略**: 各ステップの中間ファイルを都度ディスクに書き出してRAMを節約
+
+### notebooks/set_membership.ipynb
+
+「秘密の値が既知の集合に含まれているか」をゼロ知識で証明する Set Membership の実装。
+
+- **証明の仕組み**: `diff = (x - y)` の総乗（`torch.prod`）を計算。x が集合 y のいずれかと一致すれば差が 0 になり積が 0 になる
+- **制約のポイント**: 出力を 0 に固定する制約を設けることで「メンバーである」ことを保証。制約がないと「正しく不合格になった証明」が作れてしまう
+- **visibility 設定**: 入力は `hashed/private`（Poseidon ハッシュ化して秘匿）、集合と結果は `fixed`（公開）
+- **`ezkl.float_to_felt(e, 7)`**: 小数を有限体の元に変換。スケール $2^7 = 128$ 倍して固定小数点整数にする
+
 ### notebooks/simple_demo/（ステップ別）
 
 simple_demo を各ステップに分解した学習用ノートブック群。
